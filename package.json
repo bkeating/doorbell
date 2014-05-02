@@ -1,0 +1,10 @@
+{
+  "name": "doorbell",
+  "description": "doorbell",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+  "socket.io": "latest",
+  "express": "3.x"
+  }
+}
