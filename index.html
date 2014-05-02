@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost');
+	function ring()
+	{
+		socket.emit('ring', {'ring': 'data' });
+		alert("Ringing");
+	}
+	socket.on('noise', function(data){
+		var snd = new Audio("http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/doorbell.mp3"); // buffers automatically when created
+		snd.play();
+	})
+    </script>
+  </head>
+<body>
+<div id="holder">
+  <button onClick="ring()" id="doorbell">Ring</button>
+</div>
+
+</body>
+</html>
+
