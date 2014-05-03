@@ -4,15 +4,19 @@ var app = require('express')()
 
 server.listen(5050);
 
-app.use('/img',__dirname+'/img');
-
 app.get('/', function (req, res) { 
   res.sendfile(__dirname + '/index.html');
 });
 
 io.sockets.on('connection', function (socket) {
-  socket.on('ring', function (data) {
+  socket.on('play', function (data) {
     console.log(data);
-    socket.emit('noise', {hello: 'world' });
+    //socket.emit('noise', {hello: 'world' });
+    socket.broadcast.emit('play', 'ben');
+    //io.sockets.emit('noise', "tet");
+    //io.sockets.send("te2it");
+  });
+  socket.on('stop', function (data) {
+    socket.broadcast.emit('stop', 'broadcastStop');
   });
 });

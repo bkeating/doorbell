@@ -4,23 +4,41 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io.connect('http://localhost');
-	function ring()
+      var socket = io.connect('http://192.168.222.253');
+	function play()
 	{
-		socket.emit('ring', {'ring': 'data' });
-		alert("Ringing");
+		socket.emit('play', 'play');
+		document.getElementById('chime').play();
 	}
-	socket.on('noise', function(data){
-		var snd = new Audio("http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/doorbell.mp3"); // buffers automatically when created
-		snd.play();
+	function pause()
+	{
+		socket.emit('stop', 'stop');
+		document.getElementById('chime').pause();
+	}
+	socket.on('play', function(data){
+		document.getElementById('chime').play();
+		//alert("test");	
+	})
+	socket.on('stop', function(data){
+		document.getElementById('chime').pause();
 	})
     </script>
+    <style>
+	#doorbell {width: 200px; height: 200px; border: 0px; background-color:#FFFFFF;}
+	#image {width: 100%; height: 100%; background-image:url('http://s3.media.squarespace.com/production/669717/7928557/blog/wp-content/uploads/2009/10/pdb-w-bl1.jpg/w/300'); background-size: 100%;}
+	//////////////////#image:hover{background-image:url('http://s3.media.squarespace.com/production/669717/7928557/blog/wp-content/uploads/2009/10/pdb-b-a.jpg/w/300');}
+	#image:active{background-image:url('http://s3.media.squarespace.com/production/669717/7928557/blog/wp-content/uploads/2009/10/pdb-b-a.jpg/w/300');}
+    </style>
   </head>
 <body>
-<div id="holder">
-  <button onClick="ring()" id="doorbell">Ring</button>
+  <button onMouseDown="play();" onMouseUp="pause();" onMouseOut="pause();" onTouchEnd="pause();" onTouchStart="play();" id="doorbell">
+
+<div id=image>
 </div>
 
+</button>
+
+<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/doorbellchime.m4a"></audio>
 </body>
 </html>
 
