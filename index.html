@@ -7,20 +7,25 @@
 	<script>
 	var doorbell;
 	var chime;
-      	var socket = io.connect('http://192.168.222.253');
+	var timeout = 0;
+    var socket = io.connect('http://192.168.222.253');
 	window.onload = function () {
-                chime = document.getElementById('chime');
-                doorbell = document.getElementById('doorbell');
-                doorbell.onmousedown = function () {play();};
-                doorbell.onmouseup = function () {pause();};
-                doorbell.onmouseout = function () {pause();};
-                doorbell.ontouchend = function () {pause();};
-        }
+        chime = document.getElementById('chime');
+        doorbell = document.getElementById('doorbell');
+        doorbell.onmousedown = function () {play();};
+        doorbell.onmouseup = function () {pause();};
+      	doorbell.onmouseout = function () {pause();};
+        doorbell.ontouchend = function () {pause();};
+    }
 	function end()
-        {
-                chime.currentTime = 0;
-                chime.pause();
+    {
+    	timeout -= 1;
+    	if (timeout == 0)
+    	{
+        	chime.currentTime = 0;
+        	chime.pause();
         }
+    }
 	function play()
 	{
 		socket.emit('play', 'play');
@@ -29,12 +34,14 @@
 	function pause()
 	{
 		socket.emit('stop', 'stop');
-		end();
+		chime.currentTime = 0;
+        chime.pause();
 	}
 	socket.on('play', function(data){
-		chime.play();	
+		chime.play();
 	})
 	socket.on('stop', function(data){
+		timeout += 1;
 		setTimeout(end, 2000 );
 	})
     </script>
