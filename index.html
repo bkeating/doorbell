@@ -10,16 +10,20 @@
 	<script>
 	var doorbell;
 	var chime;
+	var password;
 	var timeout = 0;
-    var socket = io.connect('http://192.168.222.253');
+	var socket;
 	window.onload = function () {
         chime = document.getElementById('chime');
         doorbell = document.getElementById('doorbell');
+        submit = document.getElementById('submit')
         doorbell.onmousedown = function () {play();};
         doorbell.onmouseup = function () {pause();};
       	doorbell.onmouseout = function () {pause();};
         doorbell.ontouchend = function () {pause();};
-        doorbell.ontouchcancel = function () {pause();}
+        doorbell.ontouchcancel = function () {pause();};
+        submit.onclick = function () {connect();};
+        doorbell.style.display = 'none';
     }
 	function end()
     {
@@ -41,19 +45,33 @@
 		chime.currentTime = 0;
         chime.pause();
 	}
-	socket.on('play', function(data){
-		chime.play();
-	})
-	socket.on('stop', function(data){
-		timeout += 1;
-		setTimeout(end, 2000 );
-	})
+	function connect()
+	{
+		var password = document.getElementById('pwd').value;
+		socket = io.connect('http://192.168.131.218', {query: "userpw="+password});
+
+		socket.on('connect', function(data){
+			doorbell.style.display = 'block';
+			submit.style.display = 'none';
+			document.getElementById('pwd').style.display = 'none';
+		})
+		socket.on('play', function(data){
+			chime.play();
+		})
+		socket.on('stop', function(data){
+			timeout += 1;
+			setTimeout(end, 2000 );
+		})
+	}
     </script>
   </head>
 <body>
   <button id="doorbell">
 	<div id=image>
 	</div>
+</button>
+<textarea id=pwd></textarea>
+<button id="submit">
 </button>
 <audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/doorbellchime.m4a"></audio>
 </body>

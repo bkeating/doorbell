@@ -4,6 +4,16 @@ var app = require('express')()
 
 server.listen(5050);
 
+io.configure(function (){
+  io.set('authorization', function(handshakeData, callback){
+    console.log(handshakeData.query);
+    var auth = false;
+    if (handshakeData.query.userpw == "letmein")
+      auth = true;
+    callback(null,auth); //null for error, true for authorize
+  })
+})
+
 app.get('/', function (req, res) { 
   res.sendfile(__dirname + '/index.html');
 });
