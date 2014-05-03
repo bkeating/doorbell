@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+  	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+	
   	<link rel="stylesheet" type="text/css" href="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/style.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
@@ -16,6 +19,7 @@
         doorbell.onmouseup = function () {pause();};
       	doorbell.onmouseout = function () {pause();};
         doorbell.ontouchend = function () {pause();};
+        doorbell.ontouchcancel = function () {pause();}
     }
 	function end()
     {
