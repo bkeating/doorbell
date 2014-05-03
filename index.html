@@ -2,40 +2,48 @@
 <html>
   <head>
   	<link rel="stylesheet" type="text/css" href="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/style.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = io.connect('http://192.168.222.253');
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	var doorbell;
+	var chime;
+      	var socket = io.connect('http://192.168.222.253');
+	window.onload = function () {
+                chime = document.getElementById('chime');
+                doorbell = document.getElementById('doorbell');
+                doorbell.onmousedown = function () {play();};
+                doorbell.onmouseup = function () {pause();};
+                doorbell.onmouseout = function () {pause();};
+                doorbell.ontouchend = function () {pause();};
+        }
+	function end()
+        {
+                chime.currentTime = 0;
+                chime.pause();
+        }
 	function play()
 	{
 		socket.emit('play', 'play');
-		document.getElementById('chime').play();
+		chime.play();
 	}
 	function pause()
 	{
 		socket.emit('stop', 'stop');
-		document.getElementById('chime').pause();
+		end();
 	}
 	socket.on('play', function(data){
-		document.getElementById('chime').play();
-		//alert("test");	
+		chime.play();	
 	})
 	socket.on('stop', function(data){
-		document.getElementById('chime').pause();
+		setTimeout(end, 2000 );
 	})
     </script>
-    <style>
-	
-    </style>
   </head>
 <body>
-  <button onMouseDown="play();" onMouseUp="pause();" onMouseOut="pause();" onTouchEnd="pause();" onTouchStart="play();" id="doorbell">
-
-<div id=image>
-</div>
-
+  <button id="doorbell">
+	<div id=image>
+	</div>
 </button>
-
 <audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/doorbellchime.m4a"></audio>
 </body>
 </html>
