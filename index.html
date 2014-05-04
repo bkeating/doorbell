@@ -73,8 +73,12 @@
 			setTimeout(end, 2000 );
 		})
 		socket.on('error', function(data){
-			connecting.innerHTML = "Catastrophic...failure...";
-			refresh.style.display = 'block';
+			if (data == "handshake unauthorized")
+			{
+				connecting.innerHTML = "Catastrophic...failure...";
+				connecting.innerHTML = data;
+				refresh.style.display = 'block';
+			}
 		})
 	}
     </script>
