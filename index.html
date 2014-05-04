@@ -76,7 +76,6 @@
 			if (data == "handshake unauthorized")
 			{
 				connecting.innerHTML = "Catastrophic...failure...";
-				connecting.innerHTML = data;
 				refresh.style.display = 'block';
 			}
 		})
@@ -88,7 +87,7 @@
     	#doorbell:focus {outline: 0; box-shadow: none;}
     	button {border: 1px solid #888; background-color: #FFFFFF;}
     	#pwd {border: 1px solid #888; resize: none;}
-    	#connecting {color: black;}
+    	#connecting {color: black; font-size: 300%;}
     </style>
   </head>
 <body>
