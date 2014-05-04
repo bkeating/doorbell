@@ -4,7 +4,7 @@
   	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 	<meta name="viewport" content="width=device-width" />
 	
-  	<link rel="stylesheet" type="text/css" href="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/style.css">
+  	<link rel="stylesheet" type="text/css" href="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/style1.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
@@ -65,16 +65,24 @@
 		})
 	}
     </script>
+    <style>
+    	body {padding-top: 20%; background-image:url(http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/dots.png);}
+    	#doorbell {background: none;}
+    	#doorbell:focus {outline: 0; box-shadow: none;}
+    </style>
   </head>
 <body>
-  <button id="doorbell">
-	<div id=image>
-	</div>
-</button>
-<textarea id=pwd></textarea>
-<button id="submit">
-</button>
-<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/softdoorbell.m4a"></audio>
+	<center>
+	  	<button id="doorbell" background="transparent">
+		<div id=image>
+		</div>
+		</button>
+		<textarea id=pwd></textarea>
+		<br>
+		<button id="submit">Connect
+		</button>
+	</center>
+	<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/softdoorbell.m4a"></audio>
 </body>
 </html>
 
