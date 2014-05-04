@@ -24,13 +24,14 @@
         doorbell.ontouchcancel = function () {pause();};
         submit.onclick = function () {connect();};
         doorbell.style.display = 'none';
+        chime.currentTime = 3;
     }
 	function end()
     {
     	timeout -= 1;
     	if (timeout == 0)
     	{
-        	chime.currentTime = 0;
+        	chime.currentTime = 3;
         	chime.pause();
         }
     }
@@ -42,7 +43,7 @@
 	function pause()
 	{
 		socket.emit('stop', 'stop');
-		chime.currentTime = 0;
+		chime.currentTime = 3;
         chime.pause();
 	}
 	function connect()
@@ -73,7 +74,7 @@
 <textarea id=pwd></textarea>
 <button id="submit">
 </button>
-<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/doorbellchime.m4a"></audio>
+<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/softdoorbell.m4a"></audio>
 </body>
 </html>
 
