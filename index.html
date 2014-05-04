@@ -10,6 +10,7 @@
 	<script>
 	var doorbell;
 	var chime;
+	var refresh;
 	var password;
 	var connecting;
 	var timeout = 0;
@@ -19,13 +20,16 @@
         doorbell = document.getElementById('doorbell');
         submit = document.getElementById('submit');
         connecting = document.getElementById('connecting');
+        refresh = document.getElementById('refresh');
         doorbell.onmousedown = function () {play();};
         doorbell.onmouseup = function () {pause();};
       	doorbell.onmouseout = function () {pause();};
         doorbell.ontouchend = function () {pause();};
         doorbell.ontouchcancel = function () {pause();};
         submit.onclick = function () {connect();};
+        refresh.onclick = function () {location.reload();};
         doorbell.style.display = 'none';
+        refresh.style.display = 'none';
         chime.currentTime = 3;
         connecting.innerHTML = "";
     }
@@ -51,7 +55,7 @@
 	}
 	function connect()
 	{
-		connecting.innerHTML = "Establishing Connection";
+		connecting.innerHTML = "Thinking...thinking...";
 		submit.style.display = 'none';
 		document.getElementById('pwd').style.display = 'none';
 		var password = document.getElementById('pwd').value;
@@ -68,12 +72,19 @@
 			timeout += 1;
 			setTimeout(end, 2000 );
 		})
+		socket.on('error', function(data){
+			connecting.innerHTML = "Catastrophic...failure...";
+			refresh.style.display = 'block';
+		})
 	}
     </script>
     <style>
     	body {padding-top: 20%; background-image:url(http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/dots.png);}
-    	#doorbell {background: none;}
+    	#doorbell {background: none; outline: 0;}
     	#doorbell:focus {outline: 0; box-shadow: none;}
+    	button {border: 1px solid #888; background-color: #FFFFFF;}
+    	#pwd {border: 1px solid #888; resize: none;}
+    	#connecting {color: black;}
     </style>
   </head>
 <body>
@@ -84,9 +95,10 @@
 		</button>
 		<textarea id=pwd></textarea>
 		<br>
-		<button id="submit">Connect
+		<button id="submit">Connect!
 		</button>
 		<p id="connecting"></p>
+		<button id="refresh">Try Again</button>
 	</center>
 	<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/softdoorbell.m4a"></audio>
 </body>
