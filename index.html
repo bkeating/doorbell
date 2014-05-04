@@ -48,7 +48,7 @@
 	function connect()
 	{
 		var password = document.getElementById('pwd').value;
-		socket = io.connect('http://192.168.222.253', {query: "userpw="+password});
+		socket = io.connect(document.URL, {query: "userpw="+password});
 
 		socket.on('connect', function(data){
 			doorbell.style.display = 'block';
