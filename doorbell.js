@@ -2,7 +2,19 @@ var app = require('express')()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server);
 
-server.listen(5050);
+var port = process.env.PORT || 5050;
+
+server.listen(port);
+
+io.configure(function (){
+  io.set('authorization', function(handshakeData, callback){
+    console.log(handshakeData.query);
+    var auth = false;
+    if (handshakeData.query.userpw == "letmein")
+      auth = true;
+    callback(null,auth); //null for error, true for authorize
+  })
+})
 
 app.get('/', function (req, res) { 
   res.sendfile(__dirname + '/index.html');

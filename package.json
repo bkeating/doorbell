@@ -1,7 +1,8 @@
 {
-  "name": "doorbell",
-  "description": "doorbell",
+  "name": "hq-controller",
+  "description": "controller",
   "version": "0.0.1",
+  "main": "doorbell.js",
   "private": true,
   "dependencies": {
   "socket.io": "latest",

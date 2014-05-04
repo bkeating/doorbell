@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-  	<link rel="stylesheet" type="text/css" href="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/style.css">
+  	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+	
+  	<link rel="stylesheet" type="text/css" href="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/style1.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 	var doorbell;
 	var chime;
+	var refresh;
+	var password;
+	var connecting;
 	var timeout = 0;
-    var socket = io.connect('http://192.168.222.253');
+	var socket;
 	window.onload = function () {
         chime = document.getElementById('chime');
         doorbell = document.getElementById('doorbell');
+        submit = document.getElementById('submit');
+        connecting = document.getElementById('connecting');
+        refresh = document.getElementById('refresh');
         doorbell.onmousedown = function () {play();};
         doorbell.onmouseup = function () {pause();};
       	doorbell.onmouseout = function () {pause();};
         doorbell.ontouchend = function () {pause();};
+        doorbell.ontouchcancel = function () {pause();};
+        submit.onclick = function () {connect();};
+        refresh.onclick = function () {location.reload();};
+        doorbell.style.display = 'none';
+        refresh.style.display = 'none';
+        chime.currentTime = 3;
+        connecting.innerHTML = "";
     }
 	function end()
     {
     	timeout -= 1;
     	if (timeout == 0)
     	{
-        	chime.currentTime = 0;
+        	chime.currentTime = 3;
         	chime.pause();
         }
     }
@@ -34,24 +50,60 @@
 	function pause()
 	{
 		socket.emit('stop', 'stop');
-		chime.currentTime = 0;
+		chime.currentTime = 3;
         chime.pause();
 	}
-	socket.on('play', function(data){
-		chime.play();
-	})
-	socket.on('stop', function(data){
-		timeout += 1;
-		setTimeout(end, 2000 );
-	})
+	function connect()
+	{
+		connecting.innerHTML = "Thinking...thinking...";
+		submit.style.display = 'none';
+		document.getElementById('pwd').style.display = 'none';
+		var password = document.getElementById('pwd').value;
+		socket = io.connect(document.URL, {query: "userpw="+password});
+
+		socket.on('connect', function(data){
+			connecting.style.display = 'none';
+			doorbell.style.display = 'block';
+		})
+		socket.on('play', function(data){
+			chime.play();
+		})
+		socket.on('stop', function(data){
+			timeout += 1;
+			setTimeout(end, 2000 );
+		})
+		socket.on('error', function(data){
+			if (data == "handshake unauthorized")
+			{
+				connecting.innerHTML = "Catastrophic...failure...";
+				refresh.style.display = 'block';
+			}
+		})
+	}
     </script>
+    <style>
+    	body {padding-top: 20%; background-image:url(http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/dots.png);}
+    	#doorbell {background: none; outline: 0;}
+    	#doorbell:focus {outline: 0; box-shadow: none;}
+    	button {border: 1px solid #888; background-color: #FFFFFF;}
+    	#pwd {border: 1px solid #888; resize: none;}
+    	#connecting {color: black; font-size: 300%;}
+    </style>
   </head>
 <body>
-  <button id="doorbell">
-	<div id=image>
-	</div>
-</button>
-<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/doorbellchime.m4a"></audio>
+	<center>
+	  	<button id="doorbell" background="transparent">
+		<div id=image>
+		</div>
+		</button>
+		<textarea id=pwd></textarea>
+		<br>
+		<button id="submit">Connect!
+		</button>
+		<p id="connecting"></p>
+		<button id="refresh">Try Again</button>
+	</center>
+	<audio id="chime" src="http://blog.smashingkeyboards.com/wp-content/uploads/2014/05/softdoorbell.m4a"></audio>
 </body>
 </html>
 
